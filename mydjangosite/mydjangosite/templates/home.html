@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    {% include 'menu.html' %}
+    <h1>This is Home page</h1>
+    <form method="post" action="/homeprocess">
+      {% csrf_token %} 
+      English :
+      <input
+        type="number"
+        min="0"
+        max="100"
+        name="input1"
+        required
+        autocomplete="off"
+      />
+      Maths :
+      <input
+        type="number"
+        min="0"
+        max="100"
+        name="input2"
+        required
+        autocomplete="off"
+      />
+      Hindi:
+      <input
+        type="number"
+        min="0"
+        max="100"
+        name="input3"
+        required
+        autocomplete="off"
+      />
+      GK :
+      <input
+        type="number"
+        min=""
+        max="100"
+        name="input4"
+        required
+        autocomplete="off"
+      />
+
+      <input type="submit" />
+    </form>
+  </body>
+</html>
