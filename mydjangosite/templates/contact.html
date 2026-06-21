@@ -8,7 +8,7 @@
   <body>
     {% include 'menu.html' %}
     <h1>This is contact page</h1>
-    <form method="post" action="/contactprocess">
+    <!-- <form method="post" action="/contactprocess">
       {% csrf_token %} No1 :
       <input
         type="number"
@@ -28,6 +28,22 @@
         autocomplete="off"
       />
       <input type="submit" />
+    </form> -->
+
+    <!-- <form method="post" action="/process">
+      {% csrf_token %}
+      To: <input type="text" name="txt1"/>
+      Subject: <input type="text" name="txt2"/>
+      Body: <input type="text" name="txt3"/>
+      <input type="submit"/>
+    </form> -->
+    <form method="post" action="/senddetail">
+      {% csrf_token %}
+      Name: <input type="text" name="txt1"/> </br>
+      Mobile: <input type="text" name="txt2"/> </br>
+      Message : <input type="text" name="txt3"/> </br>
+      <!-- Email : <input type="text" name="txt4"/> </br> -->
+      <input type="submit"/>
     </form>
   </body>
 </html>

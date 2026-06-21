@@ -23,5 +23,17 @@ urlpatterns = [
     path('dashboard',views.dashboard),
     path('logout',views.logout),
     path('maildemo',views.mailsenddemo),
+    path('process',views.mailsendprocess),
+    path('senddetail',views.senddetail),
+
+    # Get details
+    path('addstudent',views.addstudentform),
+    path('addstudentformprocess',views.addstudentformprocess),
+
+
+    path('displaystudent',views.displaystudent),
+    path('deletestudent/<int:id>',views.deletestudent),
+    
+
 
 ]

@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings
+from . models import student 
 
 
 # Create your views here.
@@ -14,8 +15,6 @@ def aboutpage(request):
 def contactpage(request):
     return render(request,"contact.html")  
 
-def ToyShoppage(request):
-    return render(request,"ToyShop.html")
 
 def contactprocess(request):
     a = int(request.POST['txt1'])
@@ -97,9 +96,61 @@ def logout(request):
 def mailsenddemo(request):
     subject = 'Django Mail Demo'
     message = ' Hello How are you ?'
-    email_form = settings.Email_HOST_USER
-    recipient_list = ['faltoomaal69@gamil.com']
-    send_mail(subject,message,email_form,recipient_list)
+    email_form = settings.EMAIL_HOST_USER
+    recipient_list = ['faltoomaal69@gmail.com']
+    send_mail( subject, message, email_form, recipient_list)
     return HttpResponse("Mail Sent")
-    
+
+# MailsendProcess
+
+def mailsendprocess(request):
+    subject = request.POST['txt2']
+    message = request.POST['txt3']
+    recipient_list = [request.POST['txt1']]
+    email_form = settings.EMAIL_HOST_USER
+    send_mail( subject, message, email_form, recipient_list)
+    return HttpResponse("Mail Sent")
+
+
+def senddetail(request):
+    txt1 = request.POST['txt1']
+    txt2 = request.POST['txt2']
+    txt3 = request.POST['txt3']
+    # txt4 = request.POST['txt4']
+
+    mymsg = " Hello has Contact you",txt1," Mobile No is ",txt2," Message is ",txt3,
+    # " Email is ",txt4
+
+    subject = 'Contact us From Website'
+    message = mymsg
+    recipient_list = ['faltoomaal69@gmail.com']
+    email_form = settings.EMAIL_HOST_USER
+    send_mail( subject, message, email_form, recipient_list)
+    return HttpResponse("Mail Sent")
+
+# Get Detail 
+
+def addstudentform(request):
+    return render(request,'addstudent.html')
+
+   
+def addstudentformprocess(request):
+     txt1 = request.POST['txt1']
+     txt2 = request.POST['txt2']
+     txt3 = request.POST['txt3']
+     txt4 = request.POST['txt4']
+
+    #  subject = 'Student Detail'
+    #  message = f''' Check Detail
+    #  Name : {txt1}
+    #  Mobile : {txt2}
+    # Address : {txt3}
+    # Email :{txt4}
+    #  '''
+    #  recipient_list = ['faltoomaal69@gmail.com']
+    #  email_form = settings.EMAIL_HOST_USER
+    #  send_mail( subject, message, email_form, recipient_list)
+
+     student.objects.create(sname=txt1,smobile=txt2,saddress=txt3,semail=txt4)
+     return HttpResponse("Your Detail Is Added")
 
