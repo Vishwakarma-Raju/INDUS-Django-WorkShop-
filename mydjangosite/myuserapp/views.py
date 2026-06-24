@@ -1,8 +1,12 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, JsonResponse
 from django.core.mail import send_mail
 from django.conf import settings
-from . models import student 
+from . models import student, Category , Product
 
 
 # Create your views here.
@@ -154,3 +158,87 @@ def addstudentformprocess(request):
      student.objects.create(sname=txt1,smobile=txt2,saddress=txt3,semail=txt4)
      return HttpResponse("Your Detail Is Added")
 
+def register_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['password']
+        password = request.POST['password']
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "User Already Exists")
+            return redirect('register')
+            
+        User.objects.create_user(
+                username=username,
+                email=email,
+                password=password
+                  )
+        messages.success(request, "Registration Successful")
+        return redirect('login')
+    return render(request, 'register.html')
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['passwors']
+
+        user = authenticate(
+        request,
+        username=username,
+        password=password
+        )
+        if user is not None:
+            login(request,user)
+            return redirect('home')
+        else:
+            messages.error(request, "Invalide Username Or Password")
+
+    return render(request, 'login.html')
+
+
+def home_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    return render(request,'home.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect()
+
+def addcategory(request):
+    if request.method == "POST":
+        txt1 = request.POST['txt1']
+        Category.objects.create(title=txt1)
+        return redirect('addcategory')
+    return render(request,'addcategory.html')
+
+def displaycategory(request):
+    categorylist = Category.objects.all()
+    return render(request,'displaycategory.html',{'category': categorylist})
+
+def deletecategory(request):
+    Category.objects.get(id=id).delete()
+    return redirect('displaycategory')
+    
+
+def editcategory(request,id):
+    category = Category.objects.get(id=id)
+    if request.method == "POST":
+       category.title = request.POST['txt1']
+       category.save()
+       return redirect('displaycategory')
+    return render(request, 'editcategory.html',{'category':category})
+
+@login_required(login_url='/')
+def home_view(request):
+    return render(request,'home,html')
+
+def displayproduct(request):
+    productlist = Product.objects.all()
+    return render(request,'product.html',{'mydata':productlist})
+
+def displayproductApi(request):
+    productlist = Product.objects.all().values('id','title','price','image','category','details')
+    data = list(productlist)
+    return JsonResponse(data, safe=False)

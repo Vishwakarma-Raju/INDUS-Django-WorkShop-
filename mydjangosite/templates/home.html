@@ -8,6 +8,10 @@
   <body>
     {% include 'menu.html' %}
     <h1>This is Home page</h1>
+    <h2>
+      Welcome{{request.user.username}}
+    </h2>
+
     <form method="post" action="/homeprocess">
       {% csrf_token %} 
       English :
@@ -49,5 +53,6 @@
 
       <input type="submit" />
     </form>
+    <a href="/logout/">Logout</a>
   </body>
 </html>
